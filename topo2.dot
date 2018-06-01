@@ -1,0 +1,35 @@
+graph vx {
+"leaf01" [function="leaf" memory="512" config="./helper_scripts/config_switch.sh" ]
+"leaf02" [function="leaf" memory="512" config="./helper_scripts/config_switch.sh" ]
+"leaf03" [function="leaf" memory="512" config="./helper_scripts/config_switch.sh" ]
+"spine01" [function="spine" memory="512" config="./helper_scripts/config_switch.sh" ]
+"spine02" [function="spine" memory="512" config="./helper_scripts/config_switch.sh" ]
+"server01" [function="host" memory="512" config="./helper_scripts/config_server.sh" ]
+"server02" [function="host" memory="512" config="./helper_scripts/config_server.sh" ]
+"oob-mgmt-switch" [function="oob-switch" vagrant="eth0" os="CumulusCommunity/cumulus-vx" memory="512" config="./helper_scripts/config_oob_switch.sh" ]
+"oob-mgmt-server" [function="oob-server" vagrant="eth0" os="CumulusCommunity/vx_oob_server" version="1.0.4" memory="512" config="./helper_scripts/config_oob_server.sh" ]
+
+"leaf01":"swp5" -- "spine01":"swp2"
+"leaf02":"swp5" -- "spine01":"swp1"
+"leaf03":"swp5" -- "spine01":"swp3"
+"leaf01":"swp6" -- "spine02":"swp2"
+"leaf02":"swp6" -- "spine02":"swp1"
+"leaf03":"swp6" -- "spine02":"swp3"
+
+"leaf01":"swp15" -- "leaf02":"swp1"
+"leaf01":"swp16" -- "leaf02":"swp2"
+
+"server01":"eth1" -- "leaf01":"swp7" [left_mac="00:03:00:11:11:01"]
+"server01":"eth2" -- "leaf02":"swp7" [left_mac="00:03:00:11:11:02"]
+"server02":"eth1" -- "leaf03":"swp7" [left_mac="00:03:00:22:22:01"]
+
+"oob-mgmt-server":"eth1" -- "oob-mgmt-switch":"swp1" [right_mac="a0:00:00:00:00:61"]
+"server01":"eth0" -- "oob-mgmt-switch":"swp2" [left_mac="a0:00:00:00:00:31"]
+"server02":"eth0" -- "oob-mgmt-switch":"swp3" [left_mac="a0:00:00:00:00:32"]
+"leaf01":"eth0" -- "oob-mgmt-switch":"swp6" [left_mac="a0:00:00:00:00:11"]
+"leaf02":"eth0" -- "oob-mgmt-switch":"swp7" [left_mac="a0:00:00:00:00:12"]
+"spine01":"eth0" -- "oob-mgmt-switch":"swp8" [left_mac="a0:00:00:00:00:13"]
+"spine02":"eth0" -- "oob-mgmt-switch":"swp9" [left_mac="a0:00:00:00:00:14"]
+
+
+}

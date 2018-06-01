@@ -1,0 +1,47 @@
+#########
+## Configured by Ansible
+#########
+
+# Loopback interface
+auto lo
+iface lo inet loopback
+  address 1.1.1.20/32
+  alias loopback interface
+
+# Management interface
+auto eth0
+iface eth0 inet dhcp
+    alias management interface
+    vrf mgmt
+
+auto mgmt
+iface mgmt
+    address 127.0.0.1/8
+    vrf-table auto
+
+# Port to Server
+auto swp7
+iface swp7
+  alias to Server02
+  link-autoneg on
+  bridge-access 1009
+  # This is required for Vagrant only
+  # post-up ip link set swp1 promisc on
+
+# UPlinks to Spine01
+auto swp5
+iface swp5
+alias to Spine01
+
+auto swp6
+iface swp6
+alias to Spine02
+
+auto bridge
+iface bridge
+  bridge-vlan-aware yes
+  bridge-ports vni-10009 swp7
+  bridge-vids 1009
+  bridge-pvid 1
+
+
